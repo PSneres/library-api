@@ -1,0 +1,29 @@
+{
+  "name": "library-api",
+  "author": "Paulo Silva",
+  "version": "1.0.0",
+  "description": "REST API for managing library books and loans",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "none"
+  },
+  "private": true,
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "type": "module",
+  "imports": {
+    "#controllers/*": "./src/controllers/*.js",
+    "#routes/*": "./src/routes/*.js"
+  },
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js"
+  },
+  "dependencies": {
+    "dotenv": "^18.0.9",
+    "express": "^5.3.0"
+  }
+}

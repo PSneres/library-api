@@ -1,0 +1,29 @@
+# Dependências
+node_modules/
+package-lock.json
+
+# Variáveis de ambiente 
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# Cobertura de testes
+coverage/
+
+# Cache de ferramentas
+.eslintcache
+
+# Editor/IDE
+.vscode/
+.idea/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Dev
+goal.txt
