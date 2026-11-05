@@ -17,6 +17,8 @@
     "#controllers/*": "./src/controllers/*.js",
     "#routes/*": "./src/routes/*.js",
     "#config/*": "./src/config/*.js",
+    "#services/*": "./src/services/*.js",
+    "#repositories/*": "./src/repositories/*.js",
     "#database": "./src/database/index.js"
   },
   "main": "src/server.js",
