@@ -23,7 +23,8 @@
   "scripts": {
     "dev": "node --watch src/server.js",
     "start": "node src/server.js",
-    "db:setup": "node src/scripts/setup_db.js"
+    "db:setup": "node src/scripts/db_setup.js",
+    "db:seed": "node src/scripts/db_seed.js"
   },
   "dependencies": {
     "colors": "^1.4.0",
