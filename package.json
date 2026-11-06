@@ -26,12 +26,14 @@
     "dev": "node --watch src/server.js",
     "start": "node src/server.js",
     "db:setup": "node src/scripts/db_setup.js",
-    "db:seed": "node src/scripts/db_seed.js"
+    "db:seed": "node src/scripts/db_seed.js",
+    "token": "node src/scripts/gen_token.js"
   },
   "dependencies": {
     "colors": "^1.4.0",
     "dotenv": "^18.0.9",
     "express": "^5.3.0",
+    "jsonwebtoken": "^9.0.3",
     "pg": "^8.23.1"
   }
 }
