@@ -13,10 +13,11 @@ CREATE TABLE IF NOT EXISTS books(
   title TEXT NOT NULL,
   author TEXT NOT NULL,
   publisher TEXT NOT NULL DEFAULT 'Unknown',
-  total_count INT NOT NULL CHECK (total_count >= 0),
+  total_count INT NOT NULL CHECK (total_count > 0),
   available_count INT NOT NULL CHECK (
     available_count >= 0 AND available_count <= total_count
-  )
+  ),
+  is_active BOOLEAN NOT NULL DEFAULT TRUE
 );
 
 CREATE TABLE IF NOT EXISTS loans(
