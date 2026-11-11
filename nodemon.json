@@ -1,0 +1,10 @@
+
+{
+  "watch": ["src"],
+  "ext": "js,json,sql",
+  "ignore": ["**/*.test.js", "tests/**", "logs/**"],
+  "delay": 300,
+  "quiet": true,
+  "restartable": "rs",
+  "exec": "node src/server.js"
+}
