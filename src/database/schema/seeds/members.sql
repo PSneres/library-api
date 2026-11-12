@@ -1,8 +1,8 @@
--- Seed de 200 membros fictícios para testes da API de biblioteca.
--- Nomes inventados; eventuais coincidências com nomes reais são involuntárias.
--- E-mails usam example.test, domínio reservado para testes.
--- Datas de cadastro distribuídas de 2026-01-01 até 2026-11-11.
--- max_loans varia entre 0 e 10, conforme a constraint de members.
+-- Seed of 200 fictional members for testing the library API.
+-- All names are fictional; any resemblance to real people is coincidental.
+-- Emails use example.test, a reserved domain for testing.
+-- Registration dates range from 2026-01-01 to 2026-11-11.
+-- max_loans ranges from 0 to 10, according to the members table constraint.
 
 INSERT INTO members (name, email, created_at, max_loans)
 VALUES

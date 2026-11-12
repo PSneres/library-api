@@ -10,6 +10,10 @@ const seeds = [
     {
         name: "members",
         path: "./src/database/schema/seeds/members.sql"
+    },
+    {
+        name: "loans",
+        path: "./src/database/schema/seeds/loans.sql"
     }
 ]
 
