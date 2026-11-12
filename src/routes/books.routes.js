@@ -6,7 +6,7 @@ import { verifyToken } from "#middlewares/auth.middleware";
 const router = Router();
 
 router.get("/", listBooks);
-router.get("/:id", getBook);
+router.get("/:id", validateBookId, getBook);
 
 router.post("/", verifyToken, validateBook, addBook);
 router.post("/bulk", verifyToken, validateBooks, addBooks);

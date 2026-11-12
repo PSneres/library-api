@@ -1,5 +1,6 @@
 import { findAllBooks, modifyBookStock } from "#services/books.service";
 import { bulkInsertBooks, findById, insertBook, removeBook, activeBook } from "#repositories/books.repository";
+import { getQueryValue } from "#utils/normalizeQueryValue";
 
 export async function listBooks(req, res) {
     const query = req.query;
@@ -14,27 +15,11 @@ export async function listBooks(req, res) {
     filter.offset = Number(req.query.offset) || 0;
 
     const books = await findAllBooks(filter)
-    res.status(200).json(books)
+    res.status(200).json(books);
 }
 
 export async function getBook(req, res) {
-    const id = Number(req.params.id) ;
-
-    if (!Number.isSafeInteger(id) || id < 0) {
-        res.status(400).json({
-            error: "The ID cannot be empty or invalid."
-        });
-        return;
-    }
-
     const book = await findById(id);
-    if (!book) {
-        res.status(404).json({
-            error: "Book not found."
-        });
-        return;
-    }
-
     res.status(200).json(book)
 }
 
@@ -80,11 +65,4 @@ export async function reactivateBook(req, res) {
     }
 
     res.status(200).send(book)
-}
-
-function getQueryValue(query, key) {
-    const result = query[key];
-    const value = [result].flat()[0] ?? '';
-
-    return [key, value];
 }

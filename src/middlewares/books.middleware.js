@@ -50,8 +50,9 @@ export function validateBookPatch(req, res, next)  {
 }
 
 export async function validateBookId(req, res,next) {
-    const id = req.params.id;
-    if (!id) {
+    const id = Number(req.params.id);
+    
+    if (!Number.isSafeInteger(id) || id <= 0) {
         return res.status(400).json({ error: "Invalid id provided"  });
     }
 
