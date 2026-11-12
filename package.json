@@ -21,7 +21,8 @@
     "#repositories/*": "./src/repositories/*.js",
     "#database": "./src/database/index.js",
     "#schemas/*": "./src/schemas/*.js",
-    "#middlewares/*": "./src/middlewares/*.js"
+    "#middlewares/*": "./src/middlewares/*.js",
+    "#utils/*": "./src/utils/*.js"
   },
   "main": "src/server.js",
   "scripts": {
