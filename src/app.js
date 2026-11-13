@@ -3,10 +3,12 @@ import booksRouter from "#routes/books.routes";
 import membersRouter from "#routes/members.routes";
 import loansRouter from "#routes/loans.routes";
 import { errorHandler } from "#middlewares/errors.middleware";
+import { limiter } from "#middlewares/rateLimiter"
 
 const app = express();
 app.use(express.json());
 app.use(errorHandler);
+app.use(limiter);
 app.use("/books",  booksRouter);
 app.use("/members", membersRouter);
 app.use("/loans",  loansRouter);
