@@ -1,6 +1,7 @@
 import { findAll, findById, insertMember, bulkInsertMembers, updateMember } from "#repositories/members.repository";
 import { getQueryValue } from "#utils/normalizeQueryValue";
 import { dateRangeSchema } from "#schemas/date.schema";
+import { safeUpdateMember } from "#services/members.service";
 
 export async function getMember(req, res) {
     const member = await findById(req.params.id);
@@ -28,8 +29,8 @@ export async function listMembers(req, res) {
         });
     }
     
-    filter.limit = Number(req.query.limit) || 20;
-    filter.offset = Number(req.query.offset) || 0;
+    filter.limit = Number(query.limit) || 20;
+    filter.offset = Number(query.offset) || 0;
     
     const members = await findAll(filter);
     res.status(200).json(members);
@@ -46,6 +47,11 @@ export async function addMembers(req, res) {
 }
 
 export async function modifyMember(req, res) {
-    const member = await updateMember(req.params.id, req.body);
-    res.status(200).json(member);
+    const result = await safeUpdateMember(req.params.id, req.body);
+    
+    if (!result.success) {
+        return res.status(result.status).json({ error: result.error });
+    }
+
+    res.status(result.status).json(result.data);
 }

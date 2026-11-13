@@ -12,7 +12,7 @@ export async function findById(id, {client, forUpdate = false} = {}) {
     return rows[0];
 }
 
-export async function findAll({ name, email, max_loans=null, limit, offset, created_to=null, created_from=null }) {
+export async function findAll({ name, email, max_loans, limit, offset, created_to, created_from }) {
     const pool = await getPool();
 
     const nullableValues = [max_loans, created_from, created_to]
@@ -73,38 +73,19 @@ export async function bulkInsertMembers(members) {
   return rows;
 }
 
-export async function updateMember(id, member) {
-    const pool = await getPool();
+export async function updateMember(id, { name, email, max_loans }, client) {
+    const db = client ?? await getPool();
 
-    const setClauses = [];
-    const values = [id];
-
-    for (const [key, value] of Object.entries(member)) {
-        const index = values.length + 1;
-
-        if (key === "max_loans") {
-            setClauses.push(`
-                max_loans = GREATEST(
-                    $${index},
-                    (SELECT COUNT(*) FROM loans
-                     WHERE member_id = $1 AND returned_at IS NULL)
-                )
-            `);
-        } else {
-            setClauses.push(`${key} = $${index}`);
-        }
-
-        values.push(value);
-    }
-
-    const sql = `
-        UPDATE members
-        SET ${setClauses.join(", ")}
+    const { rows } = await db.query(
+        `UPDATE members
+        SET
+            name = COALESCE($2, name),
+            email = COALESCE($3, email),
+            max_loans = COALESCE($4, max_loans)
         WHERE id = $1
-        RETURNING *
-    `;
-
-    const { rows } = await pool.query(sql, values);
+        RETURNING *;`, 
+        [id, name, email, max_loans]
+    );
 
     return rows[0];
 }
