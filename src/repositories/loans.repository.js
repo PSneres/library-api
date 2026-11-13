@@ -1,5 +1,18 @@
 import { getPool } from "#database";
 
+export async function findById(id, { client, forUpdate=false } = {}) {
+    const db = client ?? await getPool();
+
+    const { rows } = await db.query(
+        `SELECT * FROM loans
+        WHERE id = $1
+        ${forUpdate ? " FOR UPDATE" : ""}`,
+        [id]
+    );
+
+    return rows[0];
+}
+
 export async function findAll({
     member_id, book_id,
     created_from, created_to,
@@ -38,6 +51,33 @@ export async function findAll({
     return rows;
 }
 
+export async function insertLoan({ member_id, book_id, expires_at }, client) {
+    const db = client ?? await getPool();
+
+    const { rows } = await db.query(
+        `INSERT INTO loans(member_id, book_id, expires_at)
+        VALUES ($1, $2, $3)
+        RETURNING *`,
+        [member_id, book_id, expires_at]
+    );
+
+    return rows[0]
+}
+
+export async function markLoanAsReturned(id, client) {
+    const db = client ?? await getPool();
+
+    const { rows } = await db.query(
+        `UPDATE loans
+        SET returned_at = NOW()
+        WHERE id = $1
+        RETURNING *`,
+        [id]
+    );
+
+    return rows[0];
+}
+
 export async function countActiveLoans(memberId, client) {
     const db = client ?? await getPool();
 
@@ -49,4 +89,15 @@ export async function countActiveLoans(memberId, client) {
     );
 
     return Number(rows[0].count);
+}
+
+export async function existsLoan(id) {
+    const pool = await getPool();
+
+  const { rows } = await pool.query(
+    "SELECT EXISTS ( SELECT * FROM loans WHERE id = $1 )",
+    [id]
+  );
+
+  return rows[0];
 }

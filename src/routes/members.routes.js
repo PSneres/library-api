@@ -5,8 +5,8 @@ import { verifyToken } from "#middlewares/auth.middleware";
 
 const router = Router();
 
-router.get('/:id', validateMemberId, getMember);
-router.get('/', listMembers);
+router.get('/:id', verifyToken, validateMemberId, getMember);
+router.get('/', verifyToken, listMembers);
 
 router.post('/', verifyToken, validateMember, addMember);
 router.post('/bulk', verifyToken, validateMembers, addMembers);
