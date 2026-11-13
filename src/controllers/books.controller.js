@@ -1,6 +1,7 @@
 import { findAllBooks, modifyBookStock } from "#services/books.service";
 import { bulkInsertBooks, findById, insertBook, removeBook, activeBook } from "#repositories/books.repository";
 import { getQueryValue } from "#utils/normalizeQueryValue";
+import { logger } from "#utils/logger";
 
 export async function listBooks(req, res) {
     const query = req.query;
@@ -25,11 +26,23 @@ export async function getBook(req, res) {
 
 export async function addBook(req, res)  {
     const book = await insertBook(req.body);
+
+    logger.info(
+        { action: "BOOK_CREATE", bookId: book.id },
+        "Book created successfully"
+    );
+
     res.status(201).json(book);
 }
 
 export async function addBooks(req, res) {
     const books = await bulkInsertBooks(req.body)
+
+    logger.info(
+        { action: "BOOK_BULK_CREATE", total: books.length },
+        "Books created successfully"
+    );
+
     res.status(201).json(books);
 }
 
@@ -40,11 +53,22 @@ export async function modifyBook(req, res) {
         return res.status(result.status).json({ error: result.error });
     }
 
+    logger.info(
+        { action: "BOOK_UPDATE", bookId: book.id, changes: req.body },
+        "Book changed"
+    );
+
     res.status(result.status).json(result.data);
 }
 
 export async function deleteBook(req, res) {
     const inactiveBook = await removeBook(req.params.id);
+
+    logger.info(
+        { action: "BOOK_UPDATE", bookId: book.id },
+        "Book set to inactive"
+    );
+
     res.status(200).json(inactiveBook);
 }
 
@@ -63,6 +87,11 @@ export async function reactivateBook(req, res) {
         res.status(409).json({ error: "This book is not inactive or not exists" });
         return;
     }
+
+    logger.info(
+        { action: "BOOK_UPDATE", bookId: book.id },
+        "reactivated book"
+    );
 
     res.status(200).send(book)
 }

@@ -1,6 +1,7 @@
 import "colors";
 import { getPool, withTransaction } from "#database";
 import { readFile } from "node:fs/promises";
+import { logger } from "#utils/logger";
 
 const seeds = [
     {
@@ -37,6 +38,12 @@ async function seedDatabase()  {
 
         if (rows[0].has_data) {
             console.warn("WARNING: All tables must be empty. Seed skipped.".yellow);
+            
+            logger.warn(
+                { action: "SEED_SKIPPED" },
+                "Database seeding skipped because tables already contain data"
+            );
+
             return { 
                 success: false,
                 message: "The command could not be completed; check the tables before using the command.".red
@@ -54,6 +61,8 @@ async function seedDatabase()  {
             message: `All seeds (${seeds.length}) were successfully registered`.green
          }
     });
+
+    logger.info({ action: "DATABASE_SEED"}, "All seeds have been added");
 
     console.log(result.message);
 }
@@ -77,6 +86,7 @@ async function register(seed) {
         await pool.query(sql);
 
         console.log(`${seed.name} created successfully`.green)
+        logger.info({ action: "DATABASE_SEED", seed: seed.name }, "Seed added successfully");
     }
     catch(err) {
         console.error('ERROR: Database seed failed.'.red, err);

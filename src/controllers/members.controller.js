@@ -1,7 +1,8 @@
-import { findById, insertMember, bulkInsertMembers, updateMember } from "#repositories/members.repository";
+import { findById, insertMember, bulkInsertMembers } from "#repositories/members.repository";
 import { getQueryValue } from "#utils/normalizeQueryValue";
 import { dateRangeSchema } from "#schemas/date.schema";
 import { findAllMembers, safeUpdateMember } from "#services/members.service";
+import { logger } from "#utils/logger";
 
 export async function getMember(req, res) {
     const member = await findById(req.params.id);
@@ -38,11 +39,23 @@ export async function listMembers(req, res) {
 
 export async function addMember(req, res)  {
     const member = await insertMember(req.body);
+
+    logger.info(
+        { action: "MEMBER_CREATE", memberId: member.member_id },
+        "Member created successfully"
+    );
+
     res.status(201).json(member);
 }
 
 export async function addMembers(req, res) {
-    const members = await bulkInsertMembers(req.body)
+    const members = await bulkInsertMembers(req.body);
+
+    logger.info(
+        { action: "MEMBER_BULK_CREATE", total: members.length},
+        "Members created successfully"
+    );
+
     res.status(201).json(members);
 }
 
@@ -52,6 +65,11 @@ export async function modifyMember(req, res) {
     if (!result.success) {
         return res.status(result.status).json({ error: result.error });
     }
+
+    logger.info(
+        { action: "MEMBER_UPDATE", memberId: member.member_id, changes: req.body },
+        "Member changed"
+    );
 
     res.status(result.status).json(result.data);
 }

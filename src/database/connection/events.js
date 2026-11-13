@@ -1,5 +1,10 @@
+import { logger } from "#utils/logger";
+
 export function registerPoolEvents(pool) {
   pool.on("error", (err) => {
-    console.error(`[DATABASE ERROR] ${err.message}`);
+    logger.error(
+        { err },
+        "DATABASE_POOL_ERROR"
+    );
   });
 }

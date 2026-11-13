@@ -1,4 +1,5 @@
 import { getPool } from "#database";
+import { logger } from "#utils/logger";
 
 export async function withTransaction(callback) {
     const pool = await getPool();
@@ -10,6 +11,7 @@ export async function withTransaction(callback) {
          const result = await callback(client);
          if (!result.success) {
             await client.query("ROLLBACK");
+            logger.error("TRANSACTION_FAILED");
             return result;
          }
 
@@ -18,6 +20,10 @@ export async function withTransaction(callback) {
 
     } catch (err) {
         await client.query("ROLLBACK");
+        logger.error(
+            { err },
+            "TRANSACTION_FAILED"
+        );
         throw err;
     } finally {
         client.release();

@@ -1,4 +1,6 @@
+import { logger } from "#utils/logger";
 import 'colors';
+
 export async function tablesExist(pool) {
     const { rows } = await pool.query(`
         SELECT EXISTS (
@@ -16,7 +18,10 @@ export async function tablesExist(pool) {
 
 export async function checkSchema(pool) {
     const hasTables = await tablesExist(pool);
-    if (hasTables) return;
+    if (hasTables) {
+        logger.info("SCHEMA_CHECK")
+        return; 
+    }
 
     console.error('ERROR: Required database tables do not exist.'.red);
     console.error('Run "npm run db:setup --force=true" to create the database schema.');

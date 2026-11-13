@@ -2,6 +2,7 @@ import { findById } from "#repositories/loans.repository";
 import { dateRangesSchema } from "#schemas/date.schema";
 import { createLoan, findAllLoans, returnLoanById } from "#services/loans.service";
 import { getQueryValue } from "#utils/normalizeQueryValue";
+import { logger } from "#utils/logger";
 
 export async function getLoan(req, res) {
     const loan = await findById(req.params.id);
@@ -54,6 +55,16 @@ export async function addLoan(req, res) {
         return res.status(result.status).json({ error: result.error });
     }
 
+    logger.info(
+        { 
+            action: "LOAN_CREATE", 
+            loanId: result.data.id, 
+            memberId: result.data.member_id, 
+            bookId: result.data.book_id 
+        },
+        "Loan created successfully"
+    );
+
     res.status(result.status).json(result.data);
 }
 
@@ -63,6 +74,17 @@ export async function returnLoan(req, res) {
     if (!result.success) {
         return res.status(result.status).json({ error: result.error });
     }
+
+    logger.info(
+        { 
+            action: "LOAN_UPDATE", 
+            loanId: result.data.id, 
+            memberId: result.data.member_id, 
+            bookId: result.data.book_id ,
+            returnedAt: result.data.returned_at
+        },
+        "Loan returned"
+    );
 
     res.status(result.status).json(result.data);
 }
