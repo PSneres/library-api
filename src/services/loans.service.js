@@ -111,7 +111,7 @@ export async function returnLoanById(id) {
 
 function parseLoanExpiration(expirationDuration) {
     const durationValue = Number(expirationDuration.slice(0, -1));
-    const durationUnit = expirationDuration.at(-1);
+    const durationUnit = expirationDuration.at(-1).toLowerCase();;
     const durationDays = durationValue * (durationUnit === 'w' ? 7 : 1);
 
     if (durationDays > MAX_LOAN_DAYS) return {

@@ -31,6 +31,7 @@ export function validateBooks(req, res, next) {
 
 export function validateBookPatch(req, res, next)  {
     const patchBookSchema = bookSchema
+     .omit({ is_active: true })
     .strict()
     .partial()
     .refine(data => Object.keys(data).length > 0, { message: 'At least one field is required.' });

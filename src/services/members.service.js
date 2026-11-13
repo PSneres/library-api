@@ -34,7 +34,6 @@ export async function safeUpdateMember(id, changes) {
         }
 
         const updatedMember = await updateMember(id, changes, client);
-        console.log('b')
 
         return {
             success: true,

@@ -12,7 +12,7 @@ export async function listLoans(req, res) {
     const query = req.query;
     
      
-    const validQuerys = ['member_id', 'book_id,'];
+    const validQuerys = ['member_id', 'book_id'];
     const querys =  validQuerys.map((key) => getQueryValue(query, key));
     const filter = Object.fromEntries(querys);
     

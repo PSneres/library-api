@@ -1,7 +1,7 @@
-import { findAll, findById, insertMember, bulkInsertMembers, updateMember } from "#repositories/members.repository";
+import { findById, insertMember, bulkInsertMembers, updateMember } from "#repositories/members.repository";
 import { getQueryValue } from "#utils/normalizeQueryValue";
 import { dateRangeSchema } from "#schemas/date.schema";
-import { safeUpdateMember } from "#services/members.service";
+import { findAllMembers, safeUpdateMember } from "#services/members.service";
 
 export async function getMember(req, res) {
     const member = await findById(req.params.id);
@@ -32,7 +32,7 @@ export async function listMembers(req, res) {
     filter.limit = Number(query.limit) || 20;
     filter.offset = Number(query.offset) || 0;
     
-    const members = await findAll(filter);
+    const members = await findAllMembers(filter);
     res.status(200).json(members);
 }
 
