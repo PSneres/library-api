@@ -7,3 +7,5 @@ export const dateRangeSchema = z.object({
     ({ from, to }) => !from || !to || from <= to,
     { message: "Start date cannot be after end date." }
 );
+
+export const dateRangesSchema = z.array(dateRangeSchema);
