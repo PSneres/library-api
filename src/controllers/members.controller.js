@@ -67,7 +67,7 @@ export async function modifyMember(req, res) {
     }
 
     logger.info(
-        { action: "MEMBER_UPDATE", memberId: member.member_id, changes: req.body },
+        { action: "MEMBER_UPDATE", memberId: result.data.member_id, changes: req.body },
         "Member changed"
     );
 

@@ -7,10 +7,10 @@ import { limiter } from "#middlewares/rateLimiter"
 
 const app = express();
 app.use(express.json());
-app.use(errorHandler);
 app.use(limiter);
 app.use("/books",  booksRouter);
 app.use("/members", membersRouter);
 app.use("/loans",  loansRouter);
+app.use(errorHandler);
 
 export default app;

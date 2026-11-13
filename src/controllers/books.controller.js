@@ -54,7 +54,7 @@ export async function modifyBook(req, res) {
     }
 
     logger.info(
-        { action: "BOOK_UPDATE", bookId: book.id, changes: req.body },
+        { action: "BOOK_UPDATE", bookId: result.data.id, changes: req.body },
         "Book changed"
     );
 
@@ -65,7 +65,7 @@ export async function deleteBook(req, res) {
     const inactiveBook = await removeBook(req.params.id);
 
     logger.info(
-        { action: "BOOK_UPDATE", bookId: book.id },
+        { action: "BOOK_UPDATE", bookId: incavtiveBook.id },
         "Book set to inactive"
     );
 

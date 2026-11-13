@@ -11,31 +11,37 @@ export async function getLoan(req, res) {
 
 export async function listLoans(req, res) {
     const query = req.query;
-    
-     
-    const validQuerys = ['member_id', 'book_id'];
-    const querys =  validQuerys.map((key) => getQueryValue(query, key));
+
+    const validQuerys = [
+        'member_id', 'book_id',
+        'created_from', 'created_to',
+        'expires_from', 'expires_to',
+        'returned_from', 'returned_to'
+    ];
+
+    const querys = validQuerys.map(key => getQueryValue(query, key));
     const filter = Object.fromEntries(querys);
-    
+
     const dateRanges = [
         {
-            from: filter.craeted_from,
-            to: filter.created_to
+            from: filter.created_from || undefined,
+            to: filter.created_to || undefined
         },
         {
-            from: filter.expires_from,
-            to: filter.expires_to
+            from: filter.expires_from || undefined,
+            to: filter.expires_to || undefined
         },
         {
-            from: filter.returned_from,
-            to: filter.returned_to
+            from: filter.returned_from || undefined,
+            to: filter.returned_to || undefined
         }
     ];
 
-    const result = dateRangesSchema.safeParse(dateRanges); 
+    const result = dateRangesSchema.safeParse(dateRanges);
+
     if (!result.success) {
         return res.status(400).json({
-            error: 'Invalid date range provided.',
+            error: "Invalid date range provided.",
             details: result.error.issues
         });
     }
@@ -44,7 +50,8 @@ export async function listLoans(req, res) {
     filter.offset = Number(query.offset) || 0;
     filter.active_only = getQueryValue(query, 'active_only')[1].toLowerCase() === "true";
 
-    const loans = await findAllLoans(filter)
+    const loans = await findAllLoans(filter);
+
     res.status(200).json(loans);
 }
 
