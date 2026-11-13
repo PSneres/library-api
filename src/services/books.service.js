@@ -1,5 +1,6 @@
 import { findAll, findById, updateBook } from "#repositories/books.repository";
 import { withTransaction } from "#database";
+import { safeNumber } from "#utils/safeNumber";
 
 const QUERY_LIMIT_RANGE = [1, 100]
 const QUERY_OFFSET_RANGE = [0, Number.MAX_SAFE_INTEGER]
@@ -7,8 +8,8 @@ const QUERY_OFFSET_RANGE = [0, Number.MAX_SAFE_INTEGER]
 export async function findAllBooks({ title, publisher, author, available, limit, offset, is_active }) {
     return await findAll({
         title, publisher, author, available, is_active,
-        limit: safeNumber(limit, QUERY_LIMIT_RANGE),
-        offset: safeNumber(offset, QUERY_OFFSET_RANGE)
+        limit: safeNumber(limit ?? 20, QUERY_LIMIT_RANGE),
+        offset: safeNumber(offset ?? 0, QUERY_OFFSET_RANGE)
     });
 }
 
@@ -63,8 +64,4 @@ export async function modifyBookStock(id, changes) {
                 status: 200
             };
     });
-}
-
-function safeNumber(num, range) {
-    return Math.floor(Math.min(Math.max(num, range[0]), range[1]));
 }

@@ -9,8 +9,8 @@ export async function listBooks(req, res) {
     const querys =  validQuerys.map((key) => getQueryValue(query, key));
 
     const filter = Object.fromEntries(querys);
-    filter.available = getQueryValue(query, 'available').toLowerCase() === "true";
-    filter.is_active = getQueryValue(query, 'is_active').toLowerCase() !== "false";
+    filter.available = getQueryValue(query, 'available')[1].toLowerCase() === "true";
+    filter.is_active = getQueryValue(query, 'is_active')[1].toLowerCase() !== "false";
     filter.limit = Number(req.query.limit) || 20;
     filter.offset = Number(req.query.offset) || 0;
 
@@ -19,7 +19,7 @@ export async function listBooks(req, res) {
 }
 
 export async function getBook(req, res) {
-    const book = await findById(id);
+    const book = await findById(req.params.id);
     res.status(200).json(book)
 }
 

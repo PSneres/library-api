@@ -35,7 +35,7 @@ export async function listLoans(req, res) {
 
     filter.limit = Number(query.limit) || 20;
     filter.offset = Number(query.offset) || 0;
-    filter.active_only = getQueryValue(query, 'active_only')[0].toLowerCase() === "true";
+    filter.active_only = getQueryValue(query, 'active_only')[1].toLowerCase() === "true";
 
     const loans = await findAllLoans(filter)
     res.status(200).json(loans);

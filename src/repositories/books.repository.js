@@ -71,25 +71,21 @@ export async function bulkInsertBooks(books) {
   return rows;
 }
 
-export async function updateBook(id, changes, client) {
+export async function updateBook(id, { title, author, publisher, total_count, available_count }, client) {
     const db = client ?? await getPool();
 
-    const setClauses = [];
-    const values = [id];
-
-    for (const [key, value] of Object.entries(changes)) {
-        const index = values.length;
-
-        setClauses.push(`${key} = $${index + 1}`);
-        values.push(value);
-    }
-
-    const sql = `UPDATE books
-                 SET ${setClauses.join(", ")}
-                 WHERE id = $1
-                 RETURNING *`;
-
-    const { rows } = await db.query(sql, values);
+    const { rows } = await db.query(
+        `UPDATE books
+         SET
+             title = COALESCE($2, title),
+             author = COALESCE($3, author),
+             publisher = COALESCE($4, publisher),
+             total_count = COALESCE($5, total_count),
+             available_count = COALESCE($6, available_count)
+         WHERE id = $1
+         RETURNING *`,
+        [id, title, author, publisher, total_count, available_count]
+    );
 
     return rows[0];
 }
